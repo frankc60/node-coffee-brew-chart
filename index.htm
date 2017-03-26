@@ -1,11 +1,110 @@
-<html>
+<html lang="en">
+<head>
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Coffee Brew Chart</title>
+
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<style>
+	#custom-handle {
+	    width: 3em;
+	    height: 1.6em;
+	    top: 50%;
+	    margin-top: -.8em;
+	    text-align: center;
+	    line-height: 1.6em;
+  	}
+  	#slider {
+  		margin: 10px;
+  	}
+	</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script>
+function calcDryDose(cupSize, brewRatio) {
+	$("#drydose").html(((cupSize / 1000) * brewRatio).toFixed(1));
+	return 1;
+}
+
+
+ 	$( function() {
+    	var handle = $( "#custom-handle" );
+		$( "#slider" ).slider({
+  			create: function() {
+    			handle.text( $( this ).slider( "value" ) );
+  			},
+  			slide: function( event, ui ) {
+    			handle.text( ui.value );
+    			calcDryDose(ui.value,$("#brewRatio option:selected").val());
+  			},
+  			min: 125,
+  			max: 500,
+        	orientation: "horizontal"
+		});
+  	
+		$("#brewRatio").change(function(){
+			calcDryDose($("#slider").slider("option","value"),$("#brewRatio option:selected").val());
+		});
+  	});
+  </script>
+ 
+
+
+</head>
    <body>
       
       <form action = "http://127.0.0.1:8081/process_get" method = "GET">
-         Cup Size (ml): <input type = "text" name = "cupSize">  <br>
-         Ratio (grams/litre): <input type = "text" name = "brewRatio">
-         <input type = "submit" value = "Submit">
+         <table width="90%">
+         	<tr>
+         		<td>Cup Size (ml)</td><td width="90%"><!--<input type = "text" name = "cupSize">--><div id="slider"><div id="custom-handle" class="ui-slider-handle"></div></div>
+</td>
+			</tr>
+			<tr>
+				<td>Brew Ratio (grams/litre)</td><td><select id="brewRatio" name="brewRatio">
+		  			<option value="55">55g/l</option>
+					<option value="56">56g/l</option>
+					<option value="57">57g/l</option>
+					<option value="58">58g/l</option>
+					</select></td>
+         	</tr>
+
+<tr><td>DryDose</td><td><div id="drydose">xx</div></td></tr>
+
+<tr><td colspan="2">&nbsp;</td></tr>
+
+<tr><td>TDS</td><td><div id="slider"><div id="custom-handle" class="ui-slider-handle"></td></tr>
+
+
+         	<tr><td colspan="2"><input type = "submit" value = "Submit">
+</td></tr>
+
+         </table>
+
       </form>
       
+
+
+
+<script>
+$(function(){
+
+	$("#drydose").change(function(a,b){
+		alert("changed" +a+ ", " + b);
+	});
+   // jQuery methods go here...
+   alert("asf");
+   $.post("/post_data",
+   {
+   		cupSize: 210,
+   		brewRatio: 55
+
+   }, function(data,status) {
+   		alert("data: " + data + "\nstatus:" + status);
+
+   });
+});
+
+</script>
    </body>
 </html>

@@ -1,10 +1,34 @@
-var express = require('express');
-var cookieParser = require('cookie-parser')
+var express = 		require('express');
+var bodyParser = 	require("body-parser");
+var cookieParser = 	require('cookie-parser')
 
 var app = express();
 
+//for handling cookies
 app.use(cookieParser());
+
+//for handling static folder files, eg. images
 app.use(express.static('public'));
+
+//for handling POST requests
+//Here we are configuring express to use body-parser as middle-ware.
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.post('/post_data', function (req, res) {
+ 	doseCalc1 = (req.body.cupSize) / 1000;
+   doseCalc2 = doseCalc1 * (req.body.brewRatio);
+
+ response = {
+      	cupSize:req.query.cupSize,
+      	brewRatio:req.query.brewRatio,
+   		dryDose: doseCalc2	
+   };
+
+
+   console.log(response);
+   res.end(JSON.stringify(response));
+});
 
 app.get('/index.htm', function (req, res) {
    res.sendFile( __dirname + "/" + "index.htm" );
