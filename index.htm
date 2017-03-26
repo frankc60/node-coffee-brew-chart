@@ -6,7 +6,7 @@
 
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<style>
-	#custom-handle {
+	#custom-handle,#custom-handle2{
 	    width: 3em;
 	    height: 1.6em;
 	    top: 50%;
@@ -25,6 +25,11 @@
 function calcDryDose(cupSize, brewRatio) {
 	$("#drydose").html(((cupSize / 1000) * brewRatio).toFixed(1));
 	return 1;
+}
+function calcExtraction(tds,drydose) {
+	$("#extraction").html((tds / drydose));
+
+
 }
 
 
@@ -46,6 +51,22 @@ function calcDryDose(cupSize, brewRatio) {
 		$("#brewRatio").change(function(){
 			calcDryDose($("#slider").slider("option","value"),$("#brewRatio option:selected").val());
 		});
+
+var handle2 = $( "#custom-handle2" );
+
+		$( "#slider2" ).slider({
+  			create: function() {
+    			handle2.text( $( this ).slider( "value" ) );
+  			},
+  			slide: function( event, ui ) {
+    			handle2.text( ui.value );
+    			calcExtraction(ui.value,$("#drydose").text());
+  			},
+  			min: 100,
+  			max: 265,
+        	orientation: "horizontal"
+		});
+
   	});
   </script>
  
@@ -73,8 +94,11 @@ function calcDryDose(cupSize, brewRatio) {
 
 <tr><td colspan="2">&nbsp;</td></tr>
 
-<tr><td>TDS</td><td><div id="slider"><div id="custom-handle" class="ui-slider-handle"></td></tr>
+<tr><td>TDS</td><td><div id="slider2"><div id="custom-handle2" class="ui-slider-handle"></div></td></tr>
 
+<tr><td>Extraction</td><td><div id="extraction">xx</div></td></tr>
+
+<tr><td colspan="2">&nbsp;</td></tr>
 
          	<tr><td colspan="2"><input type = "submit" value = "Submit">
 </td></tr>
