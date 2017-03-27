@@ -26,7 +26,7 @@ function calcDryDose(cupSize, brewRatio) {
 	$("#drydose").html(((cupSize / 1000) * brewRatio).toFixed(1));
 	return 1;
 }
-function calcExtraction(tds,drydose) {
+function calcExtraction(tds,drydose,cupSize) {
 	$("#extraction").html((tds / drydose));
 
 
@@ -45,6 +45,9 @@ function calcExtraction(tds,drydose) {
   			},
   			min: 125,
   			max: 500,
+  			value: 210,
+  			range: "min",
+  			step: 5,
         	orientation: "horizontal"
 		});
   	
@@ -61,9 +64,11 @@ var handle2 = $( "#custom-handle2" );
   			slide: function( event, ui ) {
     			handle2.text( ui.value );
     			calcExtraction(ui.value,$("#drydose").text());
+    			$("#showTDS").text((ui.value/100).toFixed(2));
   			},
   			min: 100,
   			max: 265,
+  			value: 135,
         	orientation: "horizontal"
 		});
 
@@ -98,7 +103,7 @@ var handle2 = $( "#custom-handle2" );
 
 <tr><td>Extraction</td><td><div id="extraction">xx</div></td></tr>
 
-<tr><td colspan="2">&nbsp;</td></tr>
+<tr><td colspan="2"><div id="showTDS">xcccc</div>&nbsp;</td></tr>
 
          	<tr><td colspan="2"><input type = "submit" value = "Submit">
 </td></tr>
